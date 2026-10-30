@@ -405,12 +405,12 @@ fn get_readable_text_color(r: u8, g: u8, b: u8) -> (u8, u8, u8) {
 }
 
 fn get_linebullet_src(route_id:String) -> (bool, String) {
+    if route_id.starts_with("95_") {return (true, "wsdot.svg".to_string());}
     let svg_path = format!("linebullet/{route_id}.svg");
     let result = ARCHIVE.contains(svg_path.as_str());
     if result {
         return (true, svg_path.to_string());
     } else {
-        // println!("No SVG for {route_id}");
         return (false, "invalid.svg".to_string().to_string());
     }
 }

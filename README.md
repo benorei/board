@@ -145,5 +145,6 @@ nix-shell
 [MIT](LICENSE)
 
 "Trip Not Real-time" icon from: https://www.svgrepo.com/svg/451785/network-wireless-no-route
-
+Ferry icon from: https://www.svgrepo.com/svg/15727/ferry
+Washington State DOT logo from: https://commons.wikimedia.org/wiki/File:WSDOT_Logo.svg
 Sound Transit route linebullets from: https://commons.wikimedia.org/wiki/File:Line_1_(Sound_Transit)_icon.svg

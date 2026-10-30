@@ -5,3 +5,5 @@ King Street Station:40_S_KS 40_S_KS_T3
 Hwy 99 & 196th St:29_2764 29_3247 29_3246 29_3225 29_1503 29_1007
 
 Westlake Station:40_1108 40_1121 96_WL
+
+Seattle Ferry Terminal:95_7 1_1889 20_1323
