@@ -13,6 +13,7 @@ pub struct Arrival {
     pub route_color: [u8; 3],
     pub trip_id: String,
     pub stop_id: String,
+    pub real_time: bool,
 }
 
 /// Recalculate `minutes` using local time + clock offset, then sort, filter,

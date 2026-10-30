@@ -1,0 +1,114 @@
+
+    // popup := PopupWindow {
+    //     close-policy: no-auto-close;
+    //     in-out property <string> stop_name;
+    //     in-out property <string> stop_ids;
+    //     width: 800px;
+    //     height: 480px;
+    //     Rectangle {
+    //         width: 100%;
+    //         height: 100%;
+    //         background: black;
+
+    //         VerticalLayout {
+    //             spacing: 10px;
+    //             padding: 10px;
+    //             Text {
+    //                 text: "Edit stop information";
+    //                 max-height: 25px;
+    //                 font-size: 25px;
+    //                 color: white;
+    //             }
+    //             HorizontalLayout {
+    //                 height: 30px;
+    //                 spacing: 10px;
+    //                 Text {
+    //                     text: "Stop name:";
+    //                     font-size: 20px;
+    //                     color: white;
+    //                     width: 200px;
+
+    //                 }
+    //                 LineEdit {
+    //                     text: stop_name;
+    //                     font-size: 20px;
+
+    //                 }
+    //             }
+    //             HorizontalLayout {
+    //                 height: 80px;
+    //                 spacing: 10px;
+    //                 Text {
+    //                     text: "Stop ids:";
+    //                     font-size: 20px;
+    //                     color: white;
+    //                     width: 200px;
+    //                 }
+    //                 TextEdit {
+    //                     font-size: 20px;
+    //                     text: stop_ids;
+    //                 }
+    //             }
+    //             HorizontalLayout {
+    //                 height: 20px;
+    //                 spacing: 10px;
+
+    //                 StandardButton { 
+    //                     kind: ok;
+    //                     width: 200px;
+    //                     clicked() => {
+    //                         popup.close();
+    //                         root.set_stop_info(popup.stop_name, popup.stop_ids);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    // MenuBar {
+    //     Menu {
+    //         title: @tr("Options");
+    //         MenuItem {
+    //             title: @tr("Change Stop");
+    //             activated => {
+    //                 popup.show();
+    //             }
+    //         }
+    //     }
+    // }
+
+
+
+    // let mut arrivals = state.raw_arrivals.borrow().clone();
+    // recalculate_and_filter(&mut arrivals, state.clock_offset_ms.get());
+
+    // // 1. Convert the data into Slint-compatible structures entirely on the current thread
+    // let ui_data_list: Vec<ArrivalData> = arrivals
+    //     .iter()
+    //     .map(|a| {
+    //         let [r, g, b] = a.route_color;
+    //         ArrivalData {
+    //             destination: a.destination.clone().into(),
+    //             time: format_time(a.minutes).replace("m", " min").into(),
+    //             route_color: slint::Color::from_rgb_u8(r, g, b),
+    //             route_label: a.route_label.clone().into(),
+    //             real_time: a.real_time,
+    //             rail: a.trip_id.contains("Rail"),
+    //         }
+    //     })
+    //     .collect();
+
+    // // 2. Obtain a thread-safe Weak handle to the MainUI component
+    // let ui_handle = state.main_ui.as_weak();
+
+    // // 3. Dispatch the raw data payload to the event loop.
+    // //    Slint handles converting a standard Vec into a Model internally when assigned to a property.
+    // slint::invoke_from_event_loop(move || {
+    //     if let Some(ui) = ui_handle.upgrade() {
+    //         // Convert our standard Vec into a Slint ModelHandle directly on the UI thread
+    //         let model = slint::ModelRc::new(slint::VecModel::from(ui_data_list));
+    //         ui.set_arrivals(model);
+    //     }
+    // })
+    // .expect("Failed to queue UI update to Slint event loop");

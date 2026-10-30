@@ -98,10 +98,17 @@ pub async fn fetch_arrivals(stop_id: &str) -> Result<(Vec<Arrival>, i64), reqwes
             let minutes = (arrival_time - server_now) / 60000;
             let destination = arr
                 .trip_headsign
+                .trim_start_matches("Downtown ")
                 .trim_end_matches(" City Center")
                 .trim_end_matches(" Downtown")
+                .replace(" Transit Center", "")
+                .trim_end_matches(" P&R")
                 .replace("Int'l Dist/Chinatown", "Int'l District")
+                .replace("U-District", "U District")
+                .replace("Via", "via")
                 .to_string();
+            
+            let real_time = arr.predicted_arrival_time > 0;
 
             let route = routes.iter().find(|r| r.id == arr.route_id);
             let route_label = route
@@ -121,6 +128,7 @@ pub async fn fetch_arrivals(stop_id: &str) -> Result<(Vec<Arrival>, i64), reqwes
                 route_color,
                 trip_id: arr.trip_id,
                 stop_id: stop_id.to_string(),
+                real_time,
             }
         })
         .collect();
