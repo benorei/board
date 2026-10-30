@@ -4,7 +4,6 @@ use slint::Image;
 use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 use std::rc::Rc;
-// use std::path::Path;
 use std::time::Duration;
 use include_assets::{NamedArchive, include_dir};
 #[cfg(feature = "framebuffer")]
@@ -110,8 +109,7 @@ export component MainUI inherits Window {
             // Linebullet
             HorizontalLayout{
                 width: 75px;
-                Rectangle {}
-                // Rectangle {visible: arrival.has_linebullet_img;} // Center image
+                Rectangle {} // Center image
                 Image {
                     visible: arrival.has_linebullet_img;
                     source: arrival.linebullet_img;
@@ -121,7 +119,6 @@ export component MainUI inherits Window {
                     vertical-alignment: center;
                     image-fit: contain;
                 } 
-                // Rectangle {visible: arrival.has_linebullet_img;} // Center image
 
                 Rectangle {
                     visible: !arrival.has_linebullet_img;
@@ -141,7 +138,7 @@ export component MainUI inherits Window {
                         }
                     }
                 }
-                Rectangle {}
+                Rectangle {} // Center image
             }
 
             // Destination
@@ -161,6 +158,7 @@ export component MainUI inherits Window {
                 spacing: 7px;
                 alignment: end;
                 // cross-axis-alignment: end; // 1.18.1 only
+
                 // Not-Realtime Indicator
                 VerticalLayout {
                     visible: !arrival.real_time;
@@ -175,6 +173,7 @@ export component MainUI inherits Window {
                         colorize: arrival.time=="Now" ? orange : white;
                     }
                 }
+
                 // Time
                 Text {
                     text: arrival.time;
@@ -183,7 +182,6 @@ export component MainUI inherits Window {
                     color: arrival.time=="Now" ? orange : white;
                     vertical-alignment: bottom;
                     horizontal-alignment: right;
-                    // min-width: 100px;
                 }
             }
         }
@@ -241,10 +239,7 @@ fn refresh_display(state: &State) {
             real_time: a.real_time.clone(),
             rail: a.trip_id.clone().contains("Rail"),
             linebullet_text_color: slint::Color::from_rgb_u8(text_color.0, text_color.1, text_color.2),
-            // linebullet_src: get_linebullet_src(a.route_id.clone()).into(),
             has_linebullet_img: has_linebullet_img.clone(),
-            // linebullet_img: if linebullet_img_src == "" {None} else {Image::load_from_path(linebullet_img_src.into())},
-            // linebullet_img: Image::load_from_path(Path::new(linebullet_img_src.as_str())).expect("Invalid linebullet image path"),
             linebullet_img: Image::load_from_svg_data(
                 ARCHIVE.get(&linebullet_img_src.as_str()).unwrap()
             ).expect("Invalid linebullet image path"),
@@ -340,7 +335,6 @@ fn main() {
         #[cfg(feature = "windowed")]
         let scanner = io::stdin();
         let mut reader = BufReader::new(scanner);
-        // let mut reader = BufReader::new(reader);
 
         loop {
             let mut line = String::new();
@@ -361,21 +355,6 @@ fn main() {
             if tx.send((info_u.0.to_string(), stop_ids.clone())).is_err() {
                 break; // async task has ended
             }
-
-
-            
-
-            // let info = Vec::from_iter(line.split(":").map(String::from));
-
-            // let stop_name = stop_name.trim_end_matches(['\r', '\n']).to_owned();
-
-            // let mut stops = String::new();
-            // match reader.read_line(&mut stops) {
-            //     Ok(0) | Err(_) => break,
-            //     Ok(_) => {}
-            // }
-
-            
         }
     });
 
@@ -405,7 +384,10 @@ fn get_readable_text_color(r: u8, g: u8, b: u8) -> (u8, u8, u8) {
 }
 
 fn get_linebullet_src(route_id:String) -> (bool, String) {
+    // Use WSDOT logo for all ferries
     if route_id.starts_with("95_") {return (true, "wsdot.svg".to_string());}
+
+    // See if any svg matches the route id
     let svg_path = format!("linebullet/{route_id}.svg");
     let result = ARCHIVE.contains(svg_path.as_str());
     if result {
