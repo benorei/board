@@ -92,16 +92,18 @@ export component MainUI inherits Window {
             // Linebullet
             HorizontalLayout{
                 width: 75px;
-                Rectangle {visible: arrival.has_linebullet_img;} // Center image
+                Rectangle {}
+                // Rectangle {visible: arrival.has_linebullet_img;} // Center image
                 Image {
                     visible: arrival.has_linebullet_img;
                     source: arrival.linebullet_img;
                     height: 50px;
-                    width: arrival.has_linebullet_img ? 50px : 0px;
+                    width: arrival.has_linebullet_img ? 75px : 0px;
                     horizontal-alignment: center;
                     vertical-alignment: center;
+                    image-fit: contain;
                 } 
-                Rectangle {visible: arrival.has_linebullet_img;} // Center image
+                // Rectangle {visible: arrival.has_linebullet_img;} // Center image
 
                 Rectangle {
                     visible: !arrival.has_linebullet_img;
@@ -121,6 +123,7 @@ export component MainUI inherits Window {
                         }
                     }
                 }
+                Rectangle {}
             }
 
             // Destination
@@ -140,14 +143,14 @@ export component MainUI inherits Window {
                 spacing: 7px;
                 alignment: end;
                 // cross-axis-alignment: end; // 1.18.1 only
-                // Realtime Indicator
+                // Not-Realtime Indicator
                 VerticalLayout {
-                    visible: arrival.real_time;
+                    visible: !arrival.real_time;
                     alignment: end;
                     padding-bottom: 10px;
-                    max-width: 20px;
+                    max-width: 25px;
                     Image {
-                        source: @image-url("realtime.svg");
+                        source: @image-url("scheduled.svg");
                         // height: 20px;
                         // horizontal-alignment: right;
                         // vertical-alignment: center;
@@ -240,27 +243,7 @@ fn refresh_display(state: &State) {
 }
 
 fn main() {
-    // let mut stop_name = String::new();
-    // reader.read_line(&mut stop_name);
-    // stop_name.pop(); // Remove newline at end
-
-    // let mut stops = String::new();
-    // reader.read_line(&mut stops);
-
-    // let stop_ids: Vec<String> = stops
-    //     .split_whitespace()
-    //     .map(str::to_string)
-        // .collect();
-
-
     let stop_ids: Vec<String> = Vec::new();
-
-    
-    // if args.len() < 2 {
-    //     eprintln!("Usage: board <stop_name> <stop_id> [stop_id...]");
-    //     std::process::exit(1);
-    // }
-
 
     // let stop_name = args[0].clone();
     // let stop_ids: Vec<String> = args[1..].to_vec();
@@ -281,15 +264,6 @@ fn main() {
     let arrivals_model = Rc::new(VecModel::<ArrivalData>::default());
     let main_ui = MainUI::new().unwrap();
     main_ui.set_arrivals(arrivals_model.clone().into());
-
-    // if args.len() >= 2 {
-    //     main_ui.width = 
-    //         args[0].parse::<i32>().unwrap()
-    //     ;
-    //     main_ui.set_window_height_px(
-    //         args[1].parse::<i32>().unwrap()
-    //     );
-    // }
 
     let state = Rc::new(State {
         main_ui,
@@ -411,12 +385,12 @@ fn get_readable_text_color(r: u8, g: u8, b: u8) -> (u8, u8, u8) {
 }
 
 fn get_linebullet_src(route_id:String) -> (bool, String) {
-    if route_id == "40_1LINE" || route_id == "40_100479" {
-        return (true, "linebullet/1.svg".to_string());
+    let svg_path = format!("linebullet/{route_id}.svg");
+    let result = ARCHIVE.contains(svg_path.as_str());
+    if result {
+        return (true, svg_path.to_string());
+    } else {
+        // println!("No SVG for {route_id}");
+        return (false, "invalid.svg".to_string().to_string());
     }
-    if route_id == "40_2LINE" {
-        return (true, "linebullet/2.svg".to_string());
-    }
-    // println!("[Note] No linebullet image for: {route_id}");
-    return (false, "invalid.svg".to_string());
 }

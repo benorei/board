@@ -138,3 +138,7 @@ nix-shell
 ## License
 
 [MIT](LICENSE)
+
+"Trip Not Real-time" icon from: https://www.svgrepo.com/svg/451785/network-wireless-no-route
+
+Sound Transit route linebullets from: https://commons.wikimedia.org/wiki/File:Line_1_(Sound_Transit)_icon.svg

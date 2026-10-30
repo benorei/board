@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="9.5038404mm"
+   height="9.5038328mm"
+   viewBox="0 0 9.5038404 9.5038328"
+   version="1.1"
+   id="svg3109"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="Swift Blue Line.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3111"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="8.4359982"
+     inkscape:cx="33.131823"
+     inkscape:cy="17.840213"
+     inkscape:window-width="1350"
+     inkscape:window-height="1040"
+     inkscape:window-x="548"
+     inkscape:window-y="70"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs3106">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath82">
+      <path
+         d="M 0,0 H 612 V 792 H 0 Z"
+         id="path80" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-152.08679,-47.409376)">
+    <path
+       d="m 152.08679,56.913209 h 9.50384 v -9.503833 h -9.50384 z"
+       style="fill:#006aff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.352778"
+       id="path74" />
+    <g
+       id="g76"
+       transform="matrix(0.35277777,0,0,-0.35277777,25.207799,280.06314)">
+      <g
+         id="g78"
+         clip-path="url(#clipPath82)">
+        <g
+           id="g84"
+           transform="translate(365.6094,641.4625)">
+          <path
+             d="m 0,0 h 5.384 c 1.809,0 2.706,1.16 2.706,2.499 0,1.16 -0.773,2.098 -1.753,2.25 0.87,0.194 1.574,0.967 1.574,2.113 0,1.159 -0.87,2.346 -2.692,2.346 H 0 Z M 2.375,5.647 V 7.234 H 4.68 c 0.483,0 0.815,-0.331 0.815,-0.787 0,-0.455 -0.332,-0.8 -0.815,-0.8 z m 0,-3.673 v 1.712 h 2.388 c 0.58,0 0.911,-0.4 0.911,-0.87 0,-0.497 -0.345,-0.842 -0.911,-0.842 z M 9.388,0 h 6.074 V 2.071 H 11.763 V 9.208 H 9.388 Z"
+             style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path86" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

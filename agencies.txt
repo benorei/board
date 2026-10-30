@@ -1,0 +1,12 @@
+King County Metro=1
+Sound Transit=40
+Pierce Transit=3
+Community Transit=29
+City of Seattle (Streetcar)=23
+Intercity Transit=19
+Washington State Ferries=95
+Seattle Center Monorail=96
+  Seattle Center Station=96_SC
+  Westlake Station=96_WL
+Everett Transit=97
+Kitsap Transit=20
