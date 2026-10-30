@@ -4,7 +4,7 @@ A real-time transit departure board built with [Slint](https://slint.dev/), disp
 
 This is a fork of the original project by [haylinmoore](https://github.com/haylinmoore/board).
 
-Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development.
+Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development. On the PROXmobil3, you can scan QR codes with the builtin scanner to change which stop is displayed.
 
 Displays route icons for Link, Sounder, the Seattle Center Monorail, Metro RapidRide, and Swift BRT.
 
