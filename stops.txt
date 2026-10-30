@@ -1,0 +1,7 @@
+Judkins Park Station:40_E01-T1 40_E01-T2 1_35922 1_35911 1_35924 1_35923
+
+King Street Station:40_S_KS 40_S_KS_T3
+
+Hwy 99 & 196th St:29_2764 29_3247 29_3246 29_3225 29_1503 29_1007
+
+Westlake Station:40_1108 40_1121 96_WL

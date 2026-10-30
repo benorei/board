@@ -46,10 +46,27 @@ export component MainUI inherits Window {
     in-out property <[ArrivalData]> arrivals;
     in-out property <string> current_time;
     in-out property <string> stop_name;
+    in-out property <bool> show_loading_screen;
 
     background: black;
     width: 800px;
     height: 480px;
+    no-frame: true;
+
+    Rectangle {
+        width: 800px;
+        height: 480px;
+        background: black;
+        visible: show_loading_screen;
+        
+        Text {
+            text: "Loading " + stop_name + "...";
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            color: white;
+            font-size: 40px;
+        }
+    }
 
     VerticalLayout {
         alignment: start;
@@ -58,6 +75,7 @@ export component MainUI inherits Window {
         padding-top: 10px;
         padding-bottom: 30px;
         spacing: 10px;
+        visible: !show_loading_screen;
 
         // Header: time left-aligned, stop name centered
         Rectangle {
@@ -364,10 +382,12 @@ fn main() {
     let task_state = state.clone();
     slint::spawn_local(async move {
         while let Some((stop_name, stop_ids)) = rx.recv().await {
+            task_state.main_ui.set_show_loading_screen(true);
             task_state.main_ui.set_stop_name(stop_name.into());
             *task_state.stop_ids.borrow_mut() = stop_ids;
 
             fetch_arrivals(&task_state).await;
+            task_state.main_ui.set_show_loading_screen(false);
             tokio::time::sleep(Duration::from_secs(3)).await;
         }
     })

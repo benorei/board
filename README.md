@@ -6,6 +6,8 @@ This is a fork of the original project by [haylinmoore](https://github.com/hayli
 
 Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development.
 
+Displays route icons for Link, Sounder, the Seattle Center Monorail, Metro RapidRide, and Swift BRT.
+
 ![The transit board showing departures for Westlake Station](readme-photos/example2.png)
 ![The transit board showing departures for the Hwy 99 & 196 St bus stop](readme-photos/example3.png)
 
@@ -36,6 +38,8 @@ The barcode scanner can be configured to automatically send a newline after ever
 
 The station/stop codes must be prefixed with the agency number (40 for Sound Transit and 1 for King County Metro). If you're using an app like OneBusAway to get the stop number, prefix the agency number to what you see in the app. For example, the Broadway E & E Mercer St northbound stop is listed as #11200 in the app, but you should enter 1_11200 in this program.
 
+The best way to make a QR code is the command line utility `qrencode` (`brew install qrencode` on mac). Don't use online QR code generators, as these often put their own links in the QR code that redirect to your content, which will not work on the pm3.
+
 Scanning a new qr code will let you change the station at any time!
 
 ## Example QR codes
@@ -44,7 +48,7 @@ Scanning a new qr code will let you change the station at any time!
 <img src="qrs/evergreen-pt.jpeg" width=200></img>
 ## Building
 
-### Desktop (x86, windowed)
+### Desktop (x86, windowed) - untested outside of macos
 
 ```
 echo "U District:40_990001 40_990002" | OBA_API_KEY=your-key cargo run
