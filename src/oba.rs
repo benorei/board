@@ -98,6 +98,7 @@ pub async fn fetch_arrivals(stop_id: &str) -> Result<(Vec<Arrival>, i64), reqwes
             let minutes = (arrival_time - server_now) / 60000;
             let destination = arr
                 .trip_headsign
+                .replace("Downtown Seattle", "%dt%")
                 .trim_start_matches("Downtown ")
                 .trim_end_matches(" City Center")
                 .trim_end_matches(" Downtown")
@@ -108,6 +109,7 @@ pub async fn fetch_arrivals(stop_id: &str) -> Result<(Vec<Arrival>, i64), reqwes
                 .replace("U-District", "U District")
                 .replace("Via", "via")
                 .replace("Of", "of")
+                .replace("%dt%", "Downtown")
                 .replace("  ", " ")
                 .to_string();
             
