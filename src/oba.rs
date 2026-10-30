@@ -101,11 +101,14 @@ pub async fn fetch_arrivals(stop_id: &str) -> Result<(Vec<Arrival>, i64), reqwes
                 .trim_start_matches("Downtown ")
                 .trim_end_matches(" City Center")
                 .trim_end_matches(" Downtown")
-                .replace(" Transit Center", "")
                 .trim_end_matches(" P&R")
+                .replace("Transit Center", "")
+                .replace("Station", "")
                 .replace("Int'l Dist/Chinatown", "Int'l District")
                 .replace("U-District", "U District")
                 .replace("Via", "via")
+                .replace("Of", "of")
+                .replace("  ", " ")
                 .to_string();
             
             let real_time = arr.predicted_arrival_time > 0;

@@ -109,13 +109,16 @@ export component MainUI inherits Window {
                     height: 50px;
                     background: arrival.route_color;
                     border-radius: arrival.rail ? 25px : 0px;
-                    Text {
-                        text: arrival.route_label;
-                        font-size: 28pt;
-                        font-weight: 800;
-                        color: arrival.linebullet-text-color;
-                        horizontal-alignment: center;
-                        vertical-alignment: center;
+                    VerticalLayout {
+                        Rectangle {} // Make it look centered
+                        Text {
+                            text: arrival.route_label;
+                            font-size: 28pt;
+                            font-weight: 800;
+                            color: arrival.linebullet-text-color;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
                     }
                 }
             }
@@ -134,7 +137,7 @@ export component MainUI inherits Window {
 
             HorizontalLayout {
                 padding-bottom: 8px;
-                spacing: 4px;
+                spacing: 7px;
                 alignment: end;
                 // cross-axis-alignment: end; // 1.18.1 only
                 // Realtime Indicator

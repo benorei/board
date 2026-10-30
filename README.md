@@ -6,6 +6,8 @@ This is a fork of the original project by [haylinmoore](https://github.com/hayli
 
 Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development.
 
+![The transit board showing departures for Judkins Park Station](readme-photos/example.png)
+
 ## Configuration
 
 Requires the `OBA_API_KEY` environment variable to be set with an [OneBusAway Puget Sound API key](https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd). Email `oba_api_key@soundtransit.org` to request one. Until then, you can use the key `TEST` which doesn't use real data but will still show something!
