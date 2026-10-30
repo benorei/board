@@ -1,6 +1,7 @@
 # board
 
 A real-time transit departure board built with [Slint](https://slint.dev/), displaying arrivals from the [OneBusAway](https://onebusaway.org/) Puget Sound API.
+This is a fork of the original project by [haylinmoore](https://github.com/haylinmoore/board).
 
 Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development.
 
