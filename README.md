@@ -33,7 +33,7 @@ Station Name:station_code_1 station_code_2 ...\n
 The newline at the end is required because the code uses the `getline` function.
 The barcode scanner can be configured to automatically send a newline after every scan, or you can put one manually in the qr code.
 
-The station/stop codes must be prefixed with the agency number (40 for Sound Transit and 1 for King County Metro). If you're using an app like OneBusAway to get the stop number, prefix the agency number to what you see in the app. For example, the Broadway E & E Mercer St northbound top is listed as #11200 in the app, but you should enter 1_11200 in this program.
+The station/stop codes must be prefixed with the agency number (40 for Sound Transit and 1 for King County Metro). If you're using an app like OneBusAway to get the stop number, prefix the agency number to what you see in the app. For example, the Broadway E & E Mercer St northbound stop is listed as #11200 in the app, but you should enter 1_11200 in this program.
 
 Scanning a new qr code will let you change the station at any time!
 
