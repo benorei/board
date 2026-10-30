@@ -6,7 +6,8 @@ This is a fork of the original project by [haylinmoore](https://github.com/hayli
 
 Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development.
 
-![The transit board showing departures for Judkins Park Station](readme-photos/example.png)
+![The transit board showing departures for Westlake Station](readme-photos/example2.png)
+![The transit board showing departures for the Hwy 99 & 196 St bus stop](readme-photos/example3.png)
 
 ## Configuration
 
@@ -38,15 +39,15 @@ The station/stop codes must be prefixed with the agency number (40 for Sound Tra
 Scanning a new qr code will let you change the station at any time!
 
 ## Example QR codes
-<img src="readme-photos/udistrict-withbus.jpeg" width=200></img>
-<img src="readme-photos/udistrict-nobus.jpeg" width=200></img>
-<img src="readme-photos/evergreen-pt.jpeg" width=200></img>
+<img src="qrs/udistrict-withbus.jpeg" width=200></img>
+<img src="qrs/udistrict-nobus.jpeg" width=200></img>
+<img src="qrs/evergreen-pt.jpeg" width=200></img>
 ## Building
 
 ### Desktop (x86, windowed)
 
 ```
-echo "U District:40_990001 40_990002" OBA_API_KEY=your-key cargo run
+echo "U District:40_990001 40_990002" | OBA_API_KEY=your-key cargo run
 ```
 
 ### ARM (PROXmobil3, framebuffer)
