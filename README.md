@@ -48,6 +48,25 @@ Scanning a new qr code will let you change the station at any time!
 <img src="qrs/evergreen-pt.jpeg" width=200></img>
 
 More codes are available in `/qrs`.
+
+## Example stop strings
+```
+Judkins Park Station:40_E01-T1 40_E01-T2 1_35922 1_35911 1_35924 1_35923
+
+King Street Station:40_S_KS 40_S_KS_T3
+
+Chinatown/King Street:40_S_KS 40_S_KS_T3 40_621 40_623
+
+Hwy 99 & 196th St:29_2764 29_3247 29_3246 29_3225 29_1503 29_1007
+
+Westlake Station:40_1108 40_1121 96_WL 1_26680
+
+Seattle Ferry Terminal:95_7 1_1889 20_1323
+
+Bainbridge Island Terminal:95_3 20_861
+
+Capitol Hill Station:1_11175 40_99610 40_99603
+```
 ## Building
 
 ### Desktop (x86, windowed) - untested outside of macos
@@ -146,7 +165,16 @@ nix-shell
 
 [MIT](LICENSE)
 
-"Trip Not Real-time" icon from: https://www.svgrepo.com/svg/451785/network-wireless-no-route
+Scheduled trip icon from: https://www.svgrepo.com/svg/532122/clock-three
+
 Ferry icon from: https://www.svgrepo.com/svg/15727/ferry
+
 Washington State DOT logo from: https://commons.wikimedia.org/wiki/File:WSDOT_Logo.svg
-Sound Transit route linebullets from: https://commons.wikimedia.org/wiki/File:Line_1_(Sound_Transit)_icon.svg
+
+Sound Transit route icons from: https://commons.wikimedia.org/wiki/File:Line_1_(Sound_Transit)_icon.svg
+
+Swfit BRT route icons from: https://commons.wikimedia.org/wiki/Category:Swift_Bus_Rapid_Transit
+
+RapidRide route icons from: https://commons.wikimedia.org/wiki/Category:RapidRide_icons
+
+Seattle Streetcar icon from: https://commons.wikimedia.org/wiki/File:Seattle_Streetcar_symbol.svg
