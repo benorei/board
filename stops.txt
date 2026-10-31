@@ -6,8 +6,10 @@ Chinatown/King Street:40_S_KS 40_S_KS_T3 40_621 40_623
 
 Hwy 99 & 196th St:29_2764 29_3247 29_3246 29_3225 29_1503 29_1007
 
-Westlake Station:40_1108 40_1121 96_WL
+Westlake Station:40_1108 40_1121 96_WL 1_26680
 
 Seattle Ferry Terminal:95_7 1_1889 20_1323
 
 Bainbridge Island Terminal:95_3 20_861
+
+Capitol Hill Station:1_11175 40_99610 40_99603

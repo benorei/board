@@ -237,7 +237,7 @@ fn refresh_display(state: &State) {
             route_color: slint::Color::from_rgb_u8(r, g, b),
             route_label: a.route_label.clone().into(),
             real_time: a.real_time.clone(),
-            rail: a.trip_id.clone().contains("Rail"),
+            rail: a.trip_id.clone().contains("Rail") || a.route_label.clone().contains("Streetcar"),
             linebullet_text_color: slint::Color::from_rgb_u8(text_color.0, text_color.1, text_color.2),
             has_linebullet_img: has_linebullet_img.clone(),
             linebullet_img: Image::load_from_svg_data(
