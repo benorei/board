@@ -16,7 +16,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build Mac OS
-      run: cargo build --verbose
     - name: Build Arm7 Linux
       run: cargo cargo zigbuild --release --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features proxmobil3
