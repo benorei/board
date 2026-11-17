@@ -17,4 +17,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build Arm7 Linux
-      run: cargo cargo zigbuild --release --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features proxmobil3
+      run: cargo zigbuild --release --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features proxmobil3
