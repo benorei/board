@@ -2,7 +2,7 @@
 
 A real-time transit departure board built with [Slint](https://slint.dev/), displaying arrivals from the [OneBusAway](https://onebusaway.org/) Puget Sound API. Uses the NFC reader and QR scanner to change which station/stop it displays!
 
-<img src="https://cdn.benoreizy.net/demo_small.gif" width=300></img>
+https://github.com/user-attachments/assets/16e82ed4-b6b6-4870-b0fd-e419f2d7a738
 
 On the PROXmobil3, you can tap NFC cards to the builtin reader or scan QR codes with the builtin scanner to change which stop is displayed.
 
