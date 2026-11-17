@@ -86,11 +86,12 @@ Capitol Hill Station:1_11175 40_99610 40_99603
 ```
 ## Building
 
-### Desktop (untested outside of MacOS)
+### Desktop (MacOS/Linux)
 
 ```
 echo "U District:40_990001 40_990002" | OBA_API_KEY=your-key cargo run
 ```
+It cannot be built for Windows due to dependence on UNIX system functions.
 
 ### ARM (PROXmobil3)
 

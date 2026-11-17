@@ -50,7 +50,6 @@ export component MainUI inherits Window {
     background: black;
     width: 800px;
     height: 480px;
-    no-frame: true;
 
     Rectangle {
         width: 800px;

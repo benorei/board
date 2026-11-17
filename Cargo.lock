@@ -1323,7 +1323,7 @@ dependencies = [
 [[package]]
 name = "feigctrl"
 version = "0.2.0"
-source = "git+https://github.com/benorei/feigctrl.git#59c1c800d761e7284eb201b8870df3bf38c0f1e5"
+source = "git+https://github.com/benorei/feigctrl.git#919a6a8a742e7133ccafc005aa5ca0cd0decb96b"
 dependencies = [
  "binrw",
  "crc",
