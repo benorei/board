@@ -1,15 +1,15 @@
 [package]
 name = "board"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 license = "MIT"
 description = "Real-time transit departure board for OneBusAway, built with Slint"
 default-run = "board"
 
 [features]
-default = ["windowed"]
-windowed = ["slint/backend-winit"]
-framebuffer = ["dep:slint-backend-linuxfb"]
+default = ["desktop"]
+desktop = ["slint/backend-winit"]
+proxmobil3 = ["dep:slint-backend-linuxfb"]
 
 [dependencies]
 chrono = "0.4"
@@ -26,6 +26,7 @@ slint = { version = "1.14.1", default-features = false, features = [
 slint-backend-linuxfb = { version = "0.1.1", optional = true }
 tokio = { version = "1.49.0", features = ["full"] }
 include_assets = "1.0.0"
+feigctrl = {git = "https://github.com/benorei/feigctrl.git"}
 
 [profile.release]
 opt-level = "z"

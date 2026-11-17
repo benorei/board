@@ -6,12 +6,12 @@ use std::collections::HashMap;
 use std::rc::Rc;
 use std::time::Duration;
 use include_assets::{NamedArchive, include_dir};
-#[cfg(feature = "framebuffer")]
+#[cfg(feature = "proxmobil3")]
 use {
     slint_backend_linuxfb::LinuxFbPlatformBuilder,
     std::fs::File,
 };
-#[cfg(feature = "windowed")]
+#[cfg(feature = "desktop")]
 use std::io;
 use {
     std::io::{BufReader, BufRead},
@@ -59,7 +59,7 @@ export component MainUI inherits Window {
         visible: show_loading_screen;
         
         Text {
-            text: "Loading " + stop_name + "...";
+            text: stop_name;
             horizontal-alignment: center;
             vertical-alignment: center;
             color: white;
@@ -264,7 +264,7 @@ fn main() {
     let rt = tokio::runtime::Runtime::new().unwrap();
     let _tokio = rt.enter();
 
-    #[cfg(feature = "framebuffer")]
+    #[cfg(feature = "proxmobil3")]
     {
         let platform = LinuxFbPlatformBuilder::new()
             .with_framebuffer("/dev/fb0")
@@ -287,10 +287,13 @@ fn main() {
         arrivals_model,
     });
 
-    #[cfg(feature = "framebuffer")]
-    state.main_ui.set_stop_name("Scan station QR to start".into());
+    state.main_ui.set_show_loading_screen(true);
 
-    #[cfg(feature = "windowed")]
+    #[cfg(feature = "proxmobil3")]
+    state.main_ui.set_stop_name("Scan station NFC or QR to start".into());
+
+
+    #[cfg(feature = "desktop")]
     state.main_ui.set_stop_name("Set stop from command line".into());
 
     // Update clock + refresh display every 10s
@@ -328,11 +331,12 @@ fn main() {
 
     // Fetch stop information from QR reader or command line
     let (tx, mut rx) = mpsc::unbounded_channel();
+    let tx3 = tx.clone();
     thread::spawn(move || {
-        #[cfg(feature = "framebuffer")]
+        #[cfg(feature = "proxmobil3")]
         let scanner = File::open("/dev/ttyUSB0").expect("Couldn't open file");
 
-        #[cfg(feature = "windowed")]
+        #[cfg(feature = "desktop")]
         let scanner = io::stdin();
         let mut reader = BufReader::new(scanner);
 
@@ -352,8 +356,59 @@ fn main() {
 
             let stop_ids: Vec<String> = info_u.1.split_whitespace().map(str::to_owned).collect();
 
-            if tx.send((info_u.0.to_string(), stop_ids.clone())).is_err() {
+            if tx3.send((info_u.0.to_string(), stop_ids.clone())).is_err() {
                 break; // async task has ended
+            }
+        }
+    });
+
+    // NFC reader - only on pm3
+    #[cfg(feature = "proxmobil3")]
+    thread::spawn(move || {
+        use feigctrl::Feig;
+        use feigctrl::{Message::{UltralightCommand, ProxCardFunction}, MessageReply::UltralightReply};
+        use feigctrl::ULSubcommand::{Read};
+        use feigctrl::ULSubcommandReply::{CardEnteredField, ReadReply};
+        use feigctrl::{NTAG, NTAGPayload};
+
+        let mut nfc = Feig::new().expect("Couldn't set up NFC reader");
+
+        // Enable NTAG cards
+        nfc.send(ProxCardFunction(10, 1)).unwrap();
+
+        let tx2 = tx.clone();
+        loop {
+            // Crashes if err
+            // Is there a way to do this without so many nested match statements?
+            let Ok(res) = nfc.receive() else {continue};
+            match res {
+                UltralightReply(reply) => {
+                    match reply {
+                        CardEnteredField(_) => {
+                            // Ask for card data
+                            nfc.send(UltralightCommand(Read{start_page: 0, num_pages: 135})).unwrap();
+                        }
+                        ReadReply(payload) => {
+                            let Ok(ntag) = NTAG::from(payload) else {continue};
+                            match ntag.records[0] {
+                                NTAGPayload::Text {lang: _, ref txt} => {
+                                    let info = txt.split_once(':');
+                                    if info == None {continue;}
+                                    let info_u = info.unwrap();
+
+                                    let stop_ids: Vec<String> = info_u.1.split_whitespace().map(str::to_owned).collect();
+
+                                    if tx2.send((info_u.0.to_string(), stop_ids.clone())).is_err() {
+                                        break; // async task has ended
+                                    }
+                                }
+                                _ => {}
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+                _ => {}
             }
         }
     });
@@ -362,12 +417,15 @@ fn main() {
     slint::spawn_local(async move {
         while let Some((stop_name, stop_ids)) = rx.recv().await {
             task_state.main_ui.set_show_loading_screen(true);
-            task_state.main_ui.set_stop_name(stop_name.into());
+            task_state.main_ui.set_stop_name(
+                format!("Loading {stop_name}...").into()
+            );
             *task_state.stop_ids.borrow_mut() = stop_ids;
 
             fetch_arrivals(&task_state).await;
+            task_state.main_ui.set_stop_name(stop_name.into());
             task_state.main_ui.set_show_loading_screen(false);
-            tokio::time::sleep(Duration::from_secs(3)).await;
+            tokio::time::sleep(Duration::from_secs(1)).await;
         }
     })
     .unwrap();

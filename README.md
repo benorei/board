@@ -1,12 +1,18 @@
 # board
 
-A real-time transit departure board built with [Slint](https://slint.dev/), displaying arrivals from the [OneBusAway](https://onebusaway.org/) Puget Sound API.
+A real-time transit departure board built with [Slint](https://slint.dev/), displaying arrivals from the [OneBusAway](https://onebusaway.org/) Puget Sound API. Uses the NFC reader and QR scanner to change which station/stop it displays!
 
-This is a fork of the original project by [haylinmoore](https://github.com/haylinmoore/board).
+<img src="readme-photos/demo.gif" width=300></img>
 
-Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development. On the PROXmobil3, you can scan QR codes with the builtin scanner to change which stop is displayed.
+On the PROXmobil3, you can tap NFC cards to the builtin reader or scan QR codes with the builtin scanner to change which stop is displayed.
+
+Designed to run on a PROXmobil3 with a framebuffer display, but also works as a desktop window for development. 
 
 Displays route icons for Link, Sounder, the Seattle Center Monorail, Metro RapidRide, and Swift BRT.
+
+For communications with the builtin cvend plug on the proxmobil3, it uses my [feigctrl](https://github.com/benorei/feigctrl) library (not yet on crates.io).
+
+This is a fork of the original project by [haylinmoore](https://github.com/haylinmoore/board). I added enhanced graphics, NFC, and QR support.
 
 ![The transit board showing departures for Westlake Station](readme-photos/example2.png)
 ![The transit board showing departures for the Hwy 99 & 196 St bus stop](readme-photos/example3.png)
@@ -16,7 +22,7 @@ Displays route icons for Link, Sounder, the Seattle Center Monorail, Metro Rapid
 Requires the `OBA_API_KEY` environment variable to be set with an [OneBusAway Puget Sound API key](https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd). Email `oba_api_key@soundtransit.org` to request one. Until then, you can use the key `TEST` which doesn't use real data but will still show something!
 
 ## Usage
-Takes no command line arguments.
+Takes no command line arguments, but the `OBA_API_KEY` environment variable must be set.
 
 ```
 board
@@ -27,29 +33,36 @@ Example:
 OBA_API_KEY=your-key cargo run
 ```
 
-## How to use / QR Codes
-After startup, it will begin to read from the barcode scanner (/dev/ttyUSB0) on the proxmobil3 or the command line (stdin) on desktop. QR codes or command line inputs should be formatted like:
+## How to use / NFC & QR Codes
+After startup, it will begin to communicate with the NFC reader (/dev/ttyUSB3) and read from the barcode scanner (/dev/ttyUSB0) on the proxmobil3 or the command line (stdin) on desktop. NFC card text records, QR codes or command line inputs should be formatted like:
 
 ```
-Station Name:station_code_1 station_code_2 ...\n
+Station Name:agency_station1 agency_station2 ...\n
 ```
-The newline at the end is required because the code uses the `getline` function.
-The barcode scanner can be configured to automatically send a newline after every scan, or you can put one manually in the qr code.
+The formatting is the same regardless of how it's being entered. 
 
-The station/stop codes must be prefixed with the agency number (40 for Sound Transit and 1 for King County Metro). If you're using an app like OneBusAway to get the stop number, prefix the agency number to what you see in the app. For example, the Broadway E & E Mercer St northbound stop is listed as #11200 in the app, but you should enter 1_11200 in this program.
+**NFC Tags**
+For an NFC tag, use an app like NFC21 Tools to write the string as text to a programmable NTAG213/215/216 tags (these are the most common tags you can get online). I've only tested it with NTAG215 tags, but it should work with all three.
 
+**QR Codes**
 The best way to make a QR code is the command line utility `qrencode` (`brew install qrencode` on mac). Don't use online QR code generators, as these often put their own links in the QR code that redirect to your content, which will not work on the pm3.
 
-Scanning a new qr code will let you change the station at any time!
+The newline at the end is required because the code uses the `getline` function.
+The barcode scanner can be configured to automatically send a newline after every scan instead (this makes it easier to do other stuff with the reader too!)
+
+**Building your own station string**
+The station/stop codes must be prefixed with the agency number (40 for Sound Transit and 1 for King County Metro). If you're using an app like OneBusAway to get the stop number, prefix the agency number to what you see in the app. For example, the Broadway E & E Mercer St northbound stop is listed as `#11200` in the app, but you should enter `1_11200` in this program because the agency number for KCM is 1. Seattle-area agency numbers are available in [`/agencies.txt`](/agencies.txt).
+
+Tapping an NFC tag or scanning a new qr code will let you change the station at any time!
 
 ## Example QR codes
 <img src="qrs/udistrict-withbus.jpeg" width=200></img>
 <img src="qrs/udistrict-nobus.jpeg" width=200></img>
 <img src="qrs/evergreen-pt.jpeg" width=200></img>
 
-More codes are available in `/qrs`.
+More codes are available in [`/qrs`](/qrs).
 
-## Example stop strings
+## Example stop strings for NFC/QR
 ```
 Judkins Park Station:40_E01-T1 40_E01-T2 1_35922 1_35911 1_35924 1_35923
 
@@ -69,81 +82,53 @@ Capitol Hill Station:1_11175 40_99610 40_99603
 ```
 ## Building
 
-### Desktop (x86, windowed) - untested outside of macos
+### Desktop (untested outside of MacOS)
 
 ```
 echo "U District:40_990001 40_990002" | OBA_API_KEY=your-key cargo run
 ```
 
-### ARM (PROXmobil3, framebuffer)
+### ARM (PROXmobil3)
 
 ```
-cargo zigbuild --release --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features framebuffer
+cargo zigbuild --release --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features proxmobil3
 ```
 
 ## Deploying to PROXmobil3
-
 1. Build the ARM binary (see above).
 
-2. Copy the binary to the device over SSH:
+2. Copy the binary to the device's USB drive over SSH:
    ```
-   cat target/armv7-unknown-linux-gnueabihf/release/board | ssh root@<DEVICE_IP> 'cat > /init/board/exe && chmod +x /init/board/exe'
-   ```
-
-3. Create the systemd service at `/init/board/board.service` on the device:
-   ```ini
-   [Unit]
-   Description=Board Display Service
-   After=network.target
-
-   [Service]
-   Type=simple
-   Environment=OBA_API_KEY=your-key
-   ExecStart=/init/board/exe
-   Restart=always
-   RestartSec=2
-   WorkingDirectory=/init/board
-
-   [Install]
-   WantedBy=multi-user.target
+   scp -O target/armv7-unknown-linux-gnueabihf/release/board root@<DEVICE_IP>:/init/board/efad/mp_sd
    ```
 
-4. Create the autorun script at `/init/autorun/99-board.sh` to install the service on boot:
-   ```sh
-   #!/bin/sh
+   You can also just put it in the root directory of the connected USB drive for the same effect.
 
-   mount -o remount,rw /
-
-   # Set timezone (adjust as needed)
-   ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
-
-   # Disable default PM3 UI
-   systemctl stop nx
-   systemctl mask nx
-   systemctl stop init-abtproxy
-   systemctl mask init-abtproxy
-
-   # Install and start board service
-   cp /init/board/board.service /etc/systemd/system/
-   systemctl daemon-reload
-   systemctl enable board.service
-
-   mount -o remount,ro /
-
-   /usr/bin/NxExe watchdog 0
-
-   systemctl start board.service
+3. Make the file runnable (Only needs to be done the first time you copy it over)
+   ```
+   chmod +x /init/efad/mp_sd/board
    ```
 
-5. To update the stop or API key later:
+4. Disable default UI (only persists until next reboot)
    ```
-   ssh root@<DEVICE_IP>
-   mount -o remount,rw /
-   vi /init/board/board.service
-   mount -o remount,ro /
-   systemctl daemon-reload
-   systemctl restart board.service
+   sudo systemctl stop nx
+   sudo systemctl stop init-abtproxy
    ```
+
+5. Run!
+   ```
+   /init/efad/mp_sd/board
+   ```
+
+Because it was run over SSH, it will only run as long as the SSH session is active. To run it automatically when the pm3 starts up, put this in the `autorun.sh` script in the root directory of your USB drive:
+
+```
+systemctl stop nx  # stop default graphics
+systemctl stop init-abtproxy  # stop default graphics
+OBA_API_KEY=your_key /init/efad/mp_sd/board
+```
+
+
 
 ## Debug CLI
 
@@ -152,16 +137,7 @@ Inspect raw API data and see how arrivals are deduplicated:
 ```
 OBA_API_KEY=your-key cargo run --bin debug_arrivals -- "University District" 40_990001 40_990002
 ```
-
-## Development
-
-Uses Nix for the development environment:
-
-```
-nix-shell
-```
-
-## License
+## License & Attribution
 
 [MIT](LICENSE)
 
