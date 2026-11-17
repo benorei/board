@@ -2,7 +2,7 @@
 
 A real-time transit departure board built with [Slint](https://slint.dev/), displaying arrivals from the [OneBusAway](https://onebusaway.org/) Puget Sound API. Uses the NFC reader and QR scanner to change which station/stop it displays!
 
-<img src="readme-photos/demo.gif" width=300></img>
+<img src="https://cdn.benoreizy.net/demo_small.gif" width=300></img>
 
 On the PROXmobil3, you can tap NFC cards to the builtin reader or scan QR codes with the builtin scanner to change which stop is displayed.
 
@@ -20,6 +20,10 @@ This is a fork of the original project by [haylinmoore](https://github.com/hayli
 ## Configuration
 
 Requires the `OBA_API_KEY` environment variable to be set with an [OneBusAway Puget Sound API key](https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd). Email `oba_api_key@soundtransit.org` to request one. Until then, you can use the key `TEST` which doesn't use real data but will still show something!
+
+## Download
+
+You can download precompiled binaries for Mac OS and the Proxmobil3 from the "releases" section on the right. The one just labeled `board` is for the PM3.
 
 ## Usage
 Takes no command line arguments, but the `OBA_API_KEY` environment variable must be set.
