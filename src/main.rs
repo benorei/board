@@ -23,12 +23,14 @@ static ARCHIVE: std::sync::LazyLock<NamedArchive> = std::sync::LazyLock::new(|| 
     return NamedArchive::load(include_dir!("assets"));
 });
 
-
+// TODO: 
+// Add audio 
 
 slint::slint! {
 import {LineEdit, TextEdit, StandardButton, HorizontalBox} from "std-widgets.slint";
 export struct ArrivalData {
     destination: string,
+    destination_line_2: string,
     time: string,
     route_color: color,
     route_label: string,
@@ -144,12 +146,26 @@ export component MainUI inherits Window {
             Text {
                 text: arrival.destination;
                 font-size: 30pt;
+                // font-size: arrival.destination.character-count < 25 ? 30pt : 25pt;
                 font-weight: 800;
                 color: white;
                 vertical-alignment: center;
                 horizontal-alignment: left;
                 horizontal-stretch: 1;
                 overflow: elide;
+            }
+
+            // Destination Line 2
+            Text {
+                text: arrival.destination-line-2;
+                font-size: 20pt;
+                font-weight: 800;
+                color: white;
+                vertical-alignment: center;
+                horizontal-alignment: left;
+                horizontal-stretch: 1;
+                overflow: elide;
+
             }
 
             HorizontalLayout {
@@ -230,8 +246,14 @@ fn refresh_display(state: &State) {
         let [r, g, b] = a.route_color;
         let text_color = get_readable_text_color(r, g, b);
         let (has_linebullet_img, linebullet_img_src) = get_linebullet_src(a.route_id.clone());
+        let dest_full = a.destination.clone();
+        let split: Vec<&str> = dest_full.split(" via ").collect();
+        let dest = split[0];
+        let dest_2; 
+        if split.len() > 1 {dest_2 = "via ".to_string() + split[1]} else {[dest_2 = "".to_string()];}
         let data = ArrivalData {
-            destination: a.destination.clone().into(),
+            destination: dest.into(),
+            destination_line_2: dest_2.into(),
             time: format_time(a.minutes).replace("m", " min").into(),
             route_color: slint::Color::from_rgb_u8(r, g, b),
             route_label: a.route_label.clone().into(),
@@ -259,6 +281,7 @@ fn main() {
 
     // let stop_name = args[0].clone();
     // let stop_ids: Vec<String> = args[1..].to_vec();
+
 
     let rt = tokio::runtime::Runtime::new().unwrap();
     let _tokio = rt.enter();
