@@ -369,45 +369,47 @@ fn main() {
         use feigctrl::ULSubcommand::{Read};
         use feigctrl::ULSubcommandReply::{CardEnteredField, ReadReply};
         use feigctrl::{NTAG, NTAGPayload};
-
-        let mut nfc = Feig::new().expect("Couldn't set up NFC reader");
-
-        // Enable NTAG cards
-        nfc.send(ProxCardFunction(10, 1)).unwrap();
-
-        let tx2 = tx.clone();
+        
         loop {
-            // Crashes if err
-            // Is there a way to do this without so many nested match statements?
-            let Ok(res) = nfc.receive() else {continue};
-            match res {
-                UltralightReply(reply) => {
-                    match reply {
-                        CardEnteredField(_) => {
-                            // Ask for card data
-                            nfc.send(UltralightCommand(Read{start_page: 0, num_pages: 135})).unwrap();
-                        }
-                        ReadReply(payload) => {
-                            let Ok(ntag) = NTAG::from(payload) else {continue};
-                            match ntag.records[0] {
-                                NTAGPayload::Text {lang: _, ref txt} => {
-                                    let info = txt.split_once(':');
-                                    if info == None {continue;}
-                                    let info_u = info.unwrap();
+            let mut nfc = Feig::new().expect("Couldn't set up NFC reader");
 
-                                    let stop_ids: Vec<String> = info_u.1.split_whitespace().map(str::to_owned).collect();
+            // Enable NTAG cards
+            nfc.send(ProxCardFunction(10, 1)).unwrap();
 
-                                    if tx2.send((info_u.0.to_string(), stop_ids.clone())).is_err() {
-                                        break; // async task has ended
-                                    }
-                                }
-                                _ => {}
+            let tx2 = tx.clone();
+            loop {
+                // Is there a way to do this without so many nested match statements?
+                // On err, restart nfc interface
+                let Ok(res) = nfc.receive() else {break};
+                match res {
+                    UltralightReply(reply) => {
+                        match reply {
+                            CardEnteredField(_) => {
+                                // Ask for card data
+                                nfc.send(UltralightCommand(Read{start_page: 0, num_pages: 135})).unwrap();
                             }
+                            ReadReply(payload) => {
+                                let Ok(ntag) = NTAG::from(payload) else {continue};
+                                match ntag.records[0] {
+                                    NTAGPayload::Text {lang: _, ref txt} => {
+                                        let info = txt.split_once(':');
+                                        if info == None {continue;}
+                                        let info_u = info.unwrap();
+
+                                        let stop_ids: Vec<String> = info_u.1.split_whitespace().map(str::to_owned).collect();
+
+                                        if tx2.send((info_u.0.to_string(), stop_ids.clone())).is_err() {
+                                            break; // async task has ended
+                                        }
+                                    }
+                                    _ => {}
+                                }
+                            }
+                            _ => {}
                         }
-                        _ => {}
                     }
+                    _ => {}
                 }
-                _ => {}
             }
         }
     });

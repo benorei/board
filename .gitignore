@@ -4,3 +4,6 @@ target/
 *.DS_Store
 assets/.DS_Store
 systemd.md
+.cargo/config.private.toml
+board
+board_macos
